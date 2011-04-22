@@ -1,6 +1,6 @@
 html { 
   margin: 0; padding: 0;
-  color: #585858; background-color: #E2E2E2;
+  color: #585858; background-color: #dedede;
   font-size: 62.8%; font-family: Helvetica, "Lucida Grande","Lucida Sans",Arial,sans-serif;
 }
 body { 
@@ -17,7 +17,7 @@ body {
 .nowrap       { white-space: nowrap; }
 
 /* Headings */
-h1, h2, h3, h4, h5, h6 { padding: 0.2em 0; margin-bottom: 1em; border-bottom: 1px solid #E2E2E2;}
+h1, h2, h3, h4, h5, h6 { padding: 0.2em 0; margin-bottom: 1em; border-bottom: 1px solid #dedede;}
 h1 { font-size: 2.0em; line-height: 1.2em; text-shadow: 1px 1px 0px #FFF; -webkit-text-shadow: 1px 1px 0px #FFF;}
 h2 { font-size: 1.7em; line-height: 1.2em; }
 h3 { font-size: 1.5em; line-height: 1.2em; }
@@ -141,7 +141,7 @@ a.action  { float: right; font-size: 0.9em;}
   padding: 30px 20px; 
   border-top: 1px solid #FFF;
   border-bottom: 1px solid #FFF;
-  background-color: #e2e2e2;
+  background-color: #ececec;
 }
 #content-title h1 {
   padding: 0; margin: 0; 
@@ -366,7 +366,7 @@ table th, table td {
   padding: 10px 8px; 
   text-align: left; 
 }
-table th { background-color: #E2E2E2; font-weight: bold; text-transform: uppercase; white-space: nowrap; }
+table th { background-color: #ececec; font-weight: bold; text-transform: uppercase; white-space: nowrap; }
 table tbody tr:nth-child(odd) td { background-color: #F9F9F9; }
 table .main { width: 100%; }
 
@@ -479,7 +479,7 @@ a.button.active {
 /* Tab Bar */
 .tab-bar {
   margin-bottom: 24px;
-  background-color: #E2E2E2;
+  background-color: #ececec;
   border: 1px solid #BBB;
 }
 .tab-bar ul {
