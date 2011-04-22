@@ -42,7 +42,7 @@ a.action  { float: right; font-size: 0.9em;}
 
 /* Header */
 #header {
-  height: 75px;
+  height: 64px;
   margin-bottom: 24px;
   border-bottom: 1px solid #fff;
   background: black;
@@ -52,7 +52,7 @@ a.action  { float: right; font-size: 0.9em;}
   width: 88px;
   height: 31px;
   position: absolute;
-  top: 28px;
+  top: 26px;
   left: 2px;
   font-size: 2.5em;
   font-weight:bold;
@@ -65,7 +65,7 @@ a.action  { float: right; font-size: 0.9em;}
 #header #session-links li {
   float: right;
   margin-left: 10px;
-  color: #FFF;
+  color: #ccc;
   background-color: #000;
   border-radius: 6px;
   -moz-border-radius: 6px;
@@ -80,18 +80,13 @@ a.action  { float: right; font-size: 0.9em;}
   -webkit-box-shadow: 0 0 3px #69c;
 }
 #header #session-links a {
-  color: #FFF;
-  padding: 0 10px 0 30px;
-  line-height: 37px;
+  color: #ccc;
+  padding: 0 10px;
+  line-height: 30px;
 }
 #header #session-links a:hover {
   text-decoration: none;
-}
-#header #session-links #sign-out {
-  background: transparent url(images/icons/bullet-red-sm.png) 12px 50% no-repeat;
-}
-#header #session-links #edit-profile {
-  padding-left: 10px;
+  color: white;
 }
 
 /* Navigation */
