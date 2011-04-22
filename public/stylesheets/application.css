@@ -67,26 +67,27 @@ a.action  { float: right; font-size: 0.9em;}
   margin-left: 10px;
   color: #ccc;
   background-color: #000;
-  border-radius: 6px;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
+  border-radius: 30px;
+  -moz-border-radius: 30px;
+  -webkit-border-radius: 30px;
   border: 1px solid #484B4F;
   font-size: 14px;
-  font-weight: bold;
 }
 #header #session-links li:hover {
   box-shadow: 0 0 3px #69c;
   -moz-box-shadow: 0 0 3px #69c;
   -webkit-box-shadow: 0 0 3px #69c;
 }
+#header #session-links li:hover a {
+  color: white;
+}
 #header #session-links a {
   color: #ccc;
-  padding: 0 10px;
+  padding: 0 14px;
   line-height: 30px;
 }
 #header #session-links a:hover {
   text-decoration: none;
-  color: white;
 }
 
 /* Navigation */
