@@ -129,9 +129,6 @@ a.action  { float: right; font-size: 0.9em;}
   border-color: #fff; 
   background-color: #CCC;
   background-image: none;
-  box-shadow: inset 0 0 5px #999; 
-  -moz-box-shadow: inset 0 0 5px #999; 
-  -webkit-box-shadow: inset 0 0 5px #999;
 }
 
 /* Content Wrapper */
@@ -464,9 +461,6 @@ a.button {
   border-radius: 30px;
   -moz-border-radius: 30px;
   -webkit-border-radius: 30px;
-  box-shadow: inset 0px 0px 4px #FFF;
-  -moz-box-shadow: inset 0px 0px 4px #FFF;
-  -webkit-box-shadow: inset 0px 0px 4px #FFF;
   line-height: 30px;
 }
 a:hover.button {
@@ -480,9 +474,6 @@ a.button.active {
   border-color: #fff; 
   background-color: #CCC;
   background-image: none;
-  box-shadow: inset 0 0 5px #999; 
-  -moz-box-shadow: inset 0 0 5px #999; 
-  -webkit-box-shadow: inset 0 0 5px #999;
 }
 
 /* Tab Bar */
