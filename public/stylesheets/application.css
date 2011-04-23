@@ -489,23 +489,21 @@ a.button.active {
 /* Tab Bar */
 .tab-bar {
   margin-top: 12px;
-  background-color: #ececec;
-  border-style: solid;
-  border-color: #BBB;
-  border-width: 1px 1px 0;
 }
 #content .tab-bar a.button {
+  border-bottom:0;
   margin-bottom:0;
+  border-top-left-radius:12px;
+  border-top-right-radius:12px;
+  border-bottom-left-radius:0;
+  border-bottom-right-radius:0;
 }
 .tab-bar ul {
-  padding: 9px 12px;
-  border-top: 1px solid #FFF;
-  border-bottom: 1px solid #FFF;
-  line-height:1em;
+  padding: 9px 0 0;
+  line-height:0;
 }
 .tab-bar li {
   display: inline-block;
-  margin-right: 14px;
 }
 
 /* Watchers and Issue Tracker Forms */
