@@ -470,6 +470,8 @@ a.button {
   -moz-border-radius: 30px;
   -webkit-border-radius: 30px;
   line-height: 30px;
+  min-width: 54px;
+  text-align: center;
 }
 a:hover.button {
   box-shadow: 0px 0px 4px #ccc;
