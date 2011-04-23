@@ -500,6 +500,15 @@ a.button.active {
   border-top-right-radius:12px;
   border-bottom-left-radius:0;
   border-bottom-right-radius:0;
+  height:30px;
+}
+#content .tab-bar a.button.active {
+  background-color:white;
+  border-color:#ccc;
+  border-style:solid;
+  border-width:1px 1px 0;
+  margin-bottom:-1px;
+  height:31px;
 }
 .tab-bar ul {
   padding: 9px 0 0;
@@ -635,6 +644,8 @@ table.tally th.value {
   width: 100%;
   margin-bottom: 1em;
   overflow: auto;
+  border:1px solid #ccc;
+  padding:1px;
 }
 .window table {
   margin: 0;
