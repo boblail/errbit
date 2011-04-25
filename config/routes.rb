@@ -14,6 +14,8 @@ Errbit::Application.routes.draw do
       post :destroy_several
       post :resolve_several
       post :unresolve_several
+      post :merge_several
+      post :unmerge_several
       get :all
     end
   end
