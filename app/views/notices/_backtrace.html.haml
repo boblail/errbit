@@ -7,6 +7,6 @@
       %tr{:class => (in_app ? 'in-app' : nil)}
         %td.line
           %span.path>= path
-          %span.file= file + ':' + line['number']
+          %span.file= "#{file}:#{line['number']}"
           &rarr;
           %span.method= line['method']
