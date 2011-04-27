@@ -45,6 +45,14 @@ module Errbit
       g.template_engine :haml
       g.test_framework  :rspec, :fixture => false
     end
+    
+    # Mailer options
+    config.action_mailer.smtp_settings = {
+      :address => "10.5.3.1",
+      :port => 25,
+      :domain => "10.5.3.1",
+      :enable_starttls_auto => false
+    }
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
