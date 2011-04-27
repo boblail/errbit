@@ -3,11 +3,11 @@ class Mailer < ActionMailer::Base
   
   def err_notification(notice)
     @notice   = notice
-    @app  = notice.err.app
+    @app      = notice.err.app
     
     mail({
       :to       => @app.watchers.map(&:address),
-      :subject  => "[#{@app.name}][#{@notice.err.environment}] #{@notice.err.message}"
+      :subject  => "[#{@app.name}:#{@notice.err.environment}] #{@notice.err.message}"
     })
   end
   
