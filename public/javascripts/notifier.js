@@ -267,18 +267,17 @@ var Hoptoad = {
 
 
 // Domain Public by Eric Wendelin http://eriwen.com/ (2008)
-//          Luke Smith http://lucassmith.name/ (2008)
-//          Loic Dachary <loic@dachary.org> (2008)
-//          Johan Euphrosine <proppy@aminche.com> (2008)
-//          Ã˜yvind Sean Kinsey http://kinsey.no/blog (2010)
+//                  Luke Smith http://lucassmith.name/ (2008)
+//                  Loic Dachary <loic@dachary.org> (2008)
+//                  Johan Euphrosine <proppy@aminche.com> (2008)
+//                  Øyvind Sean Kinsey http://kinsey.no/blog (2010)
+//                  Victor Homyakov <victor-homyakov@users.sourceforge.net> (2010)
 //
 // Information and discussions
 // http://jspoker.pokersource.info/skin/test-printstacktrace.html
 // http://eriwen.com/javascript/js-stack-trace/
 // http://eriwen.com/javascript/stacktrace-update/
 // http://pastie.org/253058
-// http://browsershots.org/http://jspoker.pokersource.info/skin/test-printstacktrace.html
-//
 //
 // guessFunctionNameFromLines comes from firebug
 //
@@ -312,13 +311,16 @@ var Hoptoad = {
 // DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
 // IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 // OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 function printStackTrace(a){var b=a&&a.e?a.e:null;a=a?!!a.guess:true;var c=new printStackTrace.implementation;b=c.run(b);return a?c.guessFunctions(b):b}printStackTrace.implementation=function(){};
-printStackTrace.implementation.prototype={run:function(a){var b=this._mode||this.mode();if(b==="other")return this.other(arguments.callee);else{var c;if(!(c=a))a:{try{0()}catch(d){c=d;break a}c=void 0}a=c;return this[b](a)}},mode:function(){try{0()}catch(a){if(a.arguments)return this._mode="chrome";else if(a.stack)return this._mode="firefox";else if(window.opera&&!("stacktrace"in a))return this._mode="opera"}return this._mode="other"},chrome:function(a){return a.stack.replace(/^.*?\n/,"").replace(/^.*?\n/,
-"").replace(/^.*?\n/,"").replace(/^[^\(]+?[\n$]/gm,"").replace(/^\s+at\s+/gm,"").replace(/^Object.<anonymous>\s*\(/gm,"{anonymous}()@").split("\n")},firefox:function(a){return a.stack.replace(/^.*?\n/,"").replace(/(?:\n@:0)?\s+$/m,"").replace(/^\(/gm,"{anonymous}(").split("\n")},opera:function(a){a=a.message.split("\n");var b=/Line\s+(\d+).*?script\s+(http\S+)(?:.*?in\s+function\s+(\S+))?/i,c,d,e;c=4;d=0;for(e=a.length;c<e;c+=2)if(b.test(a[c]))a[d++]=(RegExp.$3?RegExp.$3+"()@"+RegExp.$2+RegExp.$1:
-"{anonymous}()@"+RegExp.$2+":"+RegExp.$1)+" -- "+a[c+1].replace(/^\s+/,"");a.splice(d,a.length-d);return a},other:function(a){for(var b=/function\s*([\w\-$]+)?\s*\(/i,c=[],d=0,e,f;a&&c.length<10;){e=b.test(a.toString())?RegExp.$1||"{anonymous}":"{anonymous}";f=Array.prototype.slice.call(a.arguments);c[d++]=e+"("+printStackTrace.implementation.prototype.stringifyArguments(f)+")";if(a===a.caller&&window.opera)break;a=a.caller}return c},stringifyArguments:function(a){for(var b=0;b<a.length;++b){var c=
-a[b];if(typeof c=="object")a[b]="#object";else if(typeof c=="function")a[b]="#function";else if(typeof c=="string")a[b]='"'+c+'"'}return a.join(",")},sourceCache:{},ajax:function(a){var b=this.createXMLHTTPObject();if(b){b.open("GET",a,false);b.setRequestHeader("User-Agent","XMLHTTP/1.0");b.send("");return b.responseText}},createXMLHTTPObject:function(){for(var a,b=[function(){return new XMLHttpRequest},function(){return new ActiveXObject("Msxml2.XMLHTTP")},function(){return new ActiveXObject("Msxml3.XMLHTTP")},
-function(){return new ActiveXObject("Microsoft.XMLHTTP")}],c=0;c<b.length;c++)try{a=b[c]();this.createXMLHTTPObject=b[c];return a}catch(d){}},getSource:function(a){a in this.sourceCache||(this.sourceCache[a]=this.ajax(a).split("\n"));return this.sourceCache[a]},guessFunctions:function(a){for(var b=0;b<a.length;++b){var c=a[b],d=/{anonymous}\(.*\)@(\w+:\/\/([-\w\.]+)+(:\d+)?[^:]+):(\d+):?(\d+)?/.exec(c);if(d){var e=d[1];d=d[4];if(e&&d){e=this.guessFunctionName(e,d);a[b]=c.replace("{anonymous}",e)}}}return a},
-guessFunctionName:function(a,b){try{return this.guessFunctionNameFromLines(b,this.getSource(a))}catch(c){return"getSource failed with url: "+a+", exception: "+c.toString()}},guessFunctionNameFromLines:function(a,b){for(var c=/function ([^(]*)\(([^)]*)\)/,d=/['"]?([0-9A-Za-z_]+)['"]?\s*[:=]\s*(function|eval|new Function)/,e="",f=0;f<10;++f){e=b[a-f]+e;if(e!==undefined){var g=d.exec(e);if(g&&g[1])return g[1];else if((g=c.exec(e))&&g[1])return g[1]}}return"(?)"}};
+printStackTrace.implementation.prototype={run:function(a){a=a||function(){try{this.undef();return null}catch(c){return c}}();var b=this._mode||this.mode(a);return b==="other"?this.other(arguments.callee):this[b](a)},mode:function(a){if(a.arguments)return this._mode="chrome";else if(typeof window!=="undefined"&&window.opera&&a.stacktrace)return this._mode="opera10";else if(a.stack)return this._mode="firefox";else if(typeof window!=="undefined"&&window.opera&&!("stacktrace"in a))return this._mode="opera";
+return this._mode="other"},instrumentFunction:function(a,b,c){a=a||window;a["_old"+b]=a[b];a[b]=function(){c.call(this,printStackTrace());return a["_old"+b].apply(this,arguments)};a[b]._instrumented=true},deinstrumentFunction:function(a,b){if(a[b].constructor===Function&&a[b]._instrumented&&a["_old"+b].constructor===Function)a[b]=a["_old"+b]},chrome:function(a){return a.stack.replace(/^[^\(]+?[\n$]/gm,"").replace(/^\s+at\s+/gm,"").replace(/^Object.<anonymous>\s*\(/gm,"{anonymous}()@").split("\n")},
+firefox:function(a){return a.stack.replace(/(?:\n@:0)?\s+$/m,"").replace(/^\(/gm,"{anonymous}(").split("\n")},opera10:function(a){a=a.stacktrace.split("\n");var b=/.*line (\d+), column (\d+) in ((<anonymous function\:?\s*(\S+))|([^\(]+)\([^\)]*\))(?: in )?(.*)\s*$/i,c,d,e;c=2;d=0;for(e=a.length;c<e-2;c++)if(b.test(a[c])){var g=RegExp.$6+":"+RegExp.$1+":"+RegExp.$2,f=RegExp.$3;f=f.replace(/<anonymous function\:?\s?(\S+)?>/g,"{anonymous}");a[d++]=f+"@"+g}a.splice(d,a.length-d);return a},opera:function(a){a=
+a.message.split("\n");var b=/Line\s+(\d+).*script\s+(http\S+)(?:.*in\s+function\s+(\S+))?/i,c,d,e;c=4;d=0;for(e=a.length;c<e;c+=2)if(b.test(a[c]))a[d++]=(RegExp.$3?RegExp.$3+"()@"+RegExp.$2+RegExp.$1:"{anonymous}()@"+RegExp.$2+":"+RegExp.$1)+" -- "+a[c+1].replace(/^\s+/,"");a.splice(d,a.length-d);return a},other:function(a){for(var b=/function\s*([\w\-$]+)?\s*\(/i,c=[],d,e;a&&c.length<10;){d=b.test(a.toString())?RegExp.$1||"{anonymous}":"{anonymous}";e=Array.prototype.slice.call(a.arguments||[]);
+c[c.length]=d+"("+this.stringifyArguments(e)+")";a=a.caller}return c},stringifyArguments:function(a){for(var b=0;b<a.length;++b){var c=a[b];if(c===undefined)a[b]="undefined";else if(c===null)a[b]="null";else if(c.constructor)if(c.constructor===Array)a[b]=c.length<3?"["+this.stringifyArguments(c)+"]":"["+this.stringifyArguments(Array.prototype.slice.call(c,0,1))+"..."+this.stringifyArguments(Array.prototype.slice.call(c,-1))+"]";else if(c.constructor===Object)a[b]="#object";else if(c.constructor===
+Function)a[b]="#function";else if(c.constructor===String)a[b]='"'+c+'"'}return a.join(",")},sourceCache:{},ajax:function(a){var b=this.createXMLHTTPObject();if(b){b.open("GET",a,false);b.setRequestHeader("User-Agent","XMLHTTP/1.0");b.send("");return b.responseText}},createXMLHTTPObject:function(){for(var a,b=[function(){return new XMLHttpRequest},function(){return new ActiveXObject("Msxml2.XMLHTTP")},function(){return new ActiveXObject("Msxml3.XMLHTTP")},function(){return new ActiveXObject("Microsoft.XMLHTTP")}],
+c=0;c<b.length;c++)try{a=b[c]();this.createXMLHTTPObject=b[c];return a}catch(d){}},isSameDomain:function(a){return a.indexOf(location.hostname)!==-1},getSource:function(a){a in this.sourceCache||(this.sourceCache[a]=this.ajax(a).split("\n"));return this.sourceCache[a]},guessFunctions:function(a){for(var b=0;b<a.length;++b){var c=a[b],d=/\{anonymous\}\(.*\)@(\w+:\/\/([\-\w\.]+)+(:\d+)?[^:]+):(\d+):?(\d+)?/.exec(c);if(d){var e=d[1];d=d[4];if(e&&this.isSameDomain(e)&&d){e=this.guessFunctionName(e,d);
+a[b]=c.replace("{anonymous}",e)}}}return a},guessFunctionName:function(a,b){var c;try{c=this.guessFunctionNameFromLines(b,this.getSource(a))}catch(d){c="getSource failed with url: "+a+", exception: "+d.toString()}return c},guessFunctionNameFromLines:function(a,b){for(var c=/function ([^(]*)\(([^)]*)\)/,d=/['"]?([0-9A-Za-z_]+)['"]?\s*[:=]\s*(function|eval|new Function)/,e="",g=0;g<10;++g){e=b[a-g]+e;if(e!==undefined){var f=d.exec(e);if(f&&f[1])return f[1];else if((f=c.exec(e))&&f[1])return f[1]}}return"(?)"}};
 
 
 
