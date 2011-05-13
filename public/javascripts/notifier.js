@@ -25,177 +25,214 @@ var Hoptoad = {
                       '</notice>',
   ROOT              : window.location.protocol + '//' + window.location.host,
   BACKTRACE_MATCHER : /^(.*)\@(.*)\:(\d+)$/,
-  backtrace_filters : [/notifier\.js/],
-
-  notify: function(error) {
-    var xml     = escape(Hoptoad.generateXML(error));
-    var host    = Hoptoad.host;
-    var url     = host + '/notifier_api/v2/notices.xml?data=' + xml;
-    var request = document.createElement('iframe');
-
-    request.style.width   = '1px';
-    request.style.height  = '1px';
-    request.style.display = 'none';
-    request.src = url;
-
-    document.getElementsByTagName('head')[0].appendChild(request);
-  },
-
+  backtrace_filters : [
+                        /notifier\.js/
+                      ],
+  
+  
+  
   setEnvironment: function(value) {
     var matcher = /<environment-name>.*<\/environment-name>/;
-
-    Hoptoad.NOTICE_XML  = Hoptoad.NOTICE_XML.replace(matcher,
-                                                     '<environment-name>' +
-                                                       value +
-                                                     '</environment-name>')
+    Hoptoad.NOTICE_XML  = Hoptoad.NOTICE_XML.replace(matcher, ('<environment-name>' + value + '</environment-name>'));
   },
-
+  
   setHost: function(value) {
     Hoptoad.host = value;
   },
-
+  
   setKey: function(value) {
     var matcher = /<api-key>.*<\/api-key>/;
-
-    Hoptoad.NOTICE_XML = Hoptoad.NOTICE_XML.replace(matcher,
-                                                    '<api-key>' +
-                                                      value +
-                                                    '</api-key>');
+    Hoptoad.NOTICE_XML = Hoptoad.NOTICE_XML.replace(matcher, ('<api-key>' + value + '</api-key>'));
   },
-
+  
   setErrorDefaults: function(value) {
     Hoptoad.errorDefaults = value;
   },
-
-  generateXML: function(errorWithoutDefaults) {
-    var error = Hoptoad.mergeDefault(Hoptoad.errorDefaults, errorWithoutDefaults);
-
-    var xml       = Hoptoad.NOTICE_XML;
-    var url       = Hoptoad.escapeText(error.url       || '');
-    var component = Hoptoad.escapeText(error.component || '');
-    var action    = Hoptoad.escapeText(error.action    || '');
-    var type      = Hoptoad.escapeText(error.type      || 'Error');
-    var message   = Hoptoad.escapeText(error.message   || 'Unknown error.');
-    var backtrace = Hoptoad.generateBacktrace(error);
-
-
-    if (Hoptoad.trim(url) == '' && Hoptoad.trim(component) == '') {
-      xml = xml.replace(/<request>.*<\/request>/, '');
-    } else {
-      var data    = '';
-
-      var cgi_data = error['cgi-data'] || {};
-      cgi_data["HTTP_USER_AGENT"] = navigator.userAgent;
-      data += '<cgi-data>';
-      data += Hoptoad.generateVariables(cgi_data);
-      data += '</cgi-data>';
-
-      var methods = ['params', 'session'];
-
-      for (var i = 0; i < 2; i++) {
-        var type = methods[i];
-
-        if (error[type]) {
-          data += '<' + type + '>';
-          data += Hoptoad.generateVariables(error[type]);
-          data += '</' + type + '>';
-        }
-      }
-
-      xml = xml.replace('</request>',        data + '</request>')
-               .replace('REQUEST_URL',       url)
-               .replace('REQUEST_ACTION',    action)
-               .replace('REQUEST_COMPONENT', component);
-    }
-
-    return xml.replace('PROJECT_ROOT',      Hoptoad.ROOT)
-              .replace('EXCEPTION_CLASS',   type)
-              .replace('EXCEPTION_MESSAGE', message)
-              .replace('BACKTRACE_LINES',   backtrace.join(''));
+  
+  
+  
+  notify: function(error) {
+    var xml     = escape(Hoptoad.generateXML(error)),
+        host    = Hoptoad.host,
+        url     = host + '/notifier_api/v2/notices.xml?data=' + xml,
+        request = document.createElement('iframe');
+    
+    request.style.width   = '1px';
+    request.style.height  = '1px';
+    request.style.display = 'none';
+    request.src           = url;
+    
+    document.getElementsByTagName('head')[0].appendChild(request);
   },
-
+  
+  
+  
+  generateXML: function(errorWithoutDefaults) {
+    var error     = Hoptoad.normalizeError(errorWithoutDefaults),
+        xml       = Hoptoad.NOTICE_XML
+                      .replace('PROJECT_ROOT',        Hoptoad.ROOT)
+                      .replace('EXCEPTION_CLASS',     Hoptoad.escapeText(error.type))
+                      .replace('EXCEPTION_MESSAGE',   Hoptoad.escapeText(error.message));
+        xml       = Hoptoad.fillInRequest(xml, error);
+        xml       = Hoptoad.fillInBacktrace(xml, error);
+    
+    return xml;
+  },
+  
+  normalizeError: function(errorWithoutDefaults) {
+    var error = Hoptoad.mergeDefault(Hoptoad.errorDefaults, errorWithoutDefaults);
+    
+    error.type        = error.type        || 'Error';
+    error.message     = error.message     || 'Unknown error.';
+    error.url         = error.url         || '';
+    error.component   = error.component   || '';
+    error.action      = error.action      || '';
+    error['cgi-data'] = error['cgi-data'] || {};
+    
+    cgi_data["HTTP_USER_AGENT"] = navigator.userAgent;
+    
+    return error;
+  },
+  
+  
+  
+  fillInRequest: function(xml, error) {
+    var url       = Hoptoad.escapeText(error.url),
+        component = Hoptoad.escapeText(error.component),
+        action    = Hoptoad.escapeText(error.action),
+        noRequest = (Hoptoad.trim(url) == '') && (Hoptoad.trim(component) == '');
+    
+    return noRequest ? Hoptoad.eraseRequest(xml)
+                     : Hoptoad.fillInRequestWith(xml, error, url, action, component);
+  },
+  
+  
+  eraseRequest: function(xml) {
+    return xml.replace(/<request>.*<\/request>/, '');
+  },
+  
+  fillInRequestWith: function(xml, error, url, action, component) {
+    return xml.replace('</request>',        Hoptoad.generateData(error) + '</request>')
+              .replace('REQUEST_URL',       url)
+              .replace('REQUEST_ACTION',    action)
+              .replace('REQUEST_COMPONENT', component);
+  },
+  
+  
+  generateData: function(error) {
+    var data    = '',
+        methods = ['cgi-data', 'params', 'session'];
+        
+    for(var i=0, ii=methods.length; i<ii; i++) {
+      var type = methods[i];
+      if(error[type]) {
+        data += '<' + type + '>';
+        data += Hoptoad.generateVariables(error[type]);
+        data += '</' + type + '>';
+      }
+    }
+    
+    return data;
+  },
+  
+  generateVariables: function(parameters) {
+    var key,
+        result = '';
+    
+    for(key in parameters) {
+      result += '<var key="' + Hoptoad.escapeText(key) + '">' +
+                  Hoptoad.escapeText(parameters[key]) +
+                '</var>';
+    }
+    
+    return result;
+  },
+  
+  
+  
+  fillInBacktrace: function(xml, error) {
+    var backtrace = Hoptoad.generateBacktrace(error);
+    return xml.replace('BACKTRACE_LINES', backtrace.join(''));
+  },
+  
   generateBacktrace: function(error) {
     error = error || {};
-
-    if (typeof error.stack != 'string') {
+    
+    if(typeof error.stack != 'string') {
       try {
         (0)();
       } catch(e) {
         error.stack = e.stack;
       }
     }
-
+    
     var backtrace  = [];
     var stacktrace = Hoptoad.getStackTrace(error);
-
-    for (var i = 0, l = stacktrace.length; i < l; i++) {
+    
+    for(var i = 0, l = stacktrace.length; i < l; i++) {
       var line    = stacktrace[i];
       var matches = line.match(Hoptoad.BACKTRACE_MATCHER);
-
-      if (matches && Hoptoad.validBacktraceLine(line)) {
+      
+      if(matches && Hoptoad.validBacktraceLine(line)) {
         var file = matches[2].replace(Hoptoad.ROOT, '[PROJECT_ROOT]');
-
-        if (i == 0) {
-          if (matches[2].match(document.location.href)) {
-            backtrace.push('<line method="" file="internal: " number=""/>');
+        
+        if(i == 0) {
+          if(matches[2].match(document.location.href)) {
+            backtrace.push(Hoptoad.generateLine('', 'internal: ', ''));
           }
         }
-
-        backtrace.push('<line method="' + Hoptoad.escapeText(matches[1]) +
-                       '" file="' + Hoptoad.escapeText(file) +
-                       '" number="' + matches[3] + '" />');
+        
+        backtrace.push(Hoptoad.generateLine(
+          Hoptoad.escapeText(matches[1]),
+          Hoptoad.escapeText(file),
+          matches[3]));
       }
     }
     
     // !hack: there's got to be at least 2 lines for the parser to consider backtrace an array
     while(backtrace.length < 2) {
-      backtrace.push('<line method="" file="" number=""/>');
+      backtrace.push(Hoptoad.generateLine('', '', ''));
     }
-
+    
     return backtrace;
   },
-
+  
   getStackTrace: function(error) {
     var stacktrace = printStackTrace({ e : error, guess : false });
-
-    for (var i = 0, l = stacktrace.length; i < l; i++) {
-      if (stacktrace[i].match(/\:\d+$/)) {
+    
+    for(var i = 0, l = stacktrace.length; i < l; i++) {
+      if(stacktrace[i].match(/\:\d+$/)) {
         continue;
       }
-
-      if (stacktrace[i].indexOf('@') == -1) {
+      
+      if(stacktrace[i].indexOf('@') == -1) {
         stacktrace[i] += '@unsupported.js';
       }
-
+      
       stacktrace[i] += ':0';
     }
-
+    
     return stacktrace;
   },
-
+  
   validBacktraceLine: function(line) {
-    for (var i = 0; i < Hoptoad.backtrace_filters.length; i++) {
-      if (line.match(Hoptoad.backtrace_filters[i])) {
+    for(var i = 0; i < Hoptoad.backtrace_filters.length; i++) {
+      if(line.match(Hoptoad.backtrace_filters[i])) {
         return false;
       }
     }
-
+    
     return true;
   },
-
-  generateVariables: function(parameters) {
-    var key;
-    var result = '';
-
-    for (key in parameters) {
-      result += '<var key="' + Hoptoad.escapeText(key) + '">' +
-                  Hoptoad.escapeText(parameters[key]) +
-                '</var>';
-    }
-
-    return result;
+  
+  generateLine: function(method, file, number) {
+    return '<line method="' + method +
+               '" file="' + file +
+               '" number="' + number + '" />';
   },
-
+  
+  
+  
   escapeText: function(text) {
     return text.replace(/&/g, '&#38;')
                .replace(/</g, '&#60;')
@@ -203,25 +240,25 @@ var Hoptoad = {
                .replace(/'/g, '&#39;')
                .replace(/"/g, '&#34;');
   },
-
+  
   trim: function(text) {
     return text.toString().replace(/^\s+/, '').replace(/\s+$/, '');
   },
-
+  
   mergeDefault: function(defaults, hash) {
     var cloned = {};
     var key;
-
-    for (key in hash) {
+    
+    for(key in hash) {
       cloned[key] = hash[key];
     }
-
-    for (key in defaults) {
-      if (!cloned.hasOwnProperty(key)) {
+    
+    for(key in defaults) {
+      if(!cloned.hasOwnProperty(key)) {
         cloned[key] = defaults[key];
       }
     }
-
+    
     return cloned;
   }
 };
