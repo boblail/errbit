@@ -169,7 +169,7 @@ var Hoptoad = {
     var backtrace  = [];
     var stacktrace = Hoptoad.getStackTrace(error);
     
-    for(var i = 0, l = stacktrace.length; i < l; i++) {
+    for(var i=0, ii=stacktrace.length; i<ii; i++) {
       var line    = stacktrace[i];
       var matches = line.match(Hoptoad.BACKTRACE_MATCHER);
       
@@ -198,7 +198,7 @@ var Hoptoad = {
   },
   
   getStackTrace: function(error) {
-    var stacktrace = printStackTrace({ e : error, guess : false });
+    var stacktrace = printStackTrace(/*{ e : error, guess : false }*/);
     
     for(var i = 0, l = stacktrace.length; i < l; i++) {
       if(stacktrace[i].match(/\:\d+$/)) {
