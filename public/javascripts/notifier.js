@@ -89,7 +89,7 @@ var Hoptoad = {
     error.action      = error.action      || '';
     error['cgi-data'] = error['cgi-data'] || {};
     
-    cgi_data["HTTP_USER_AGENT"] = navigator.userAgent;
+    error['cgi-data']['HTTP_USER_AGENT'] = navigator.userAgent;
     
     return error;
   },
