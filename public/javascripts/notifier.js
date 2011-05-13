@@ -1,5 +1,5 @@
 var Hoptoad = {
-  VERSION           : '0.1.0',
+  VERSION           : '0.1.1',
   NOTICE_XML        : '<?xml version="1.0" encoding="UTF-8"?>' + 
                       '<notice version="2.0">' + 
                         '<api-key></api-key>' + 
