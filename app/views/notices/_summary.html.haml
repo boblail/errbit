@@ -2,7 +2,7 @@
   %table.summary
     %tr
       %th Message
-      %td.main.nowrap= notice.message
+      %td.main.nowrap= message_graph(notice.problem)
     - if notice.request['url'].present?
       %tr
         %th URL

@@ -7,6 +7,12 @@ module ApplicationHelper
   
   
   
+  def message_graph(problem)
+    create_percentage_table_for(problem) {|notice| notice.message}
+  end
+  
+  
+  
   def user_agent_graph(problem)
     create_percentage_table_for(problem) {|notice| pretty_user_agent(notice.user_agent)}
   end
