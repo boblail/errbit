@@ -51,11 +51,14 @@
       }
       
       function showIframe() {
-        var iframe = getLastIframe(),
-            html = iframe ? iframe.contentWindow.document.body.childNodes[0].innerHTML : '',
-            target = document.getElementById('notification'),
-            formatted = formatXml(html),
-            textNode = document.createTextNode(formatted);
+        var iframe      = getLastIframe(),
+            escapedHtml = iframe ? iframe.contentWindow.document.body.innerHTML : '',
+            html        = unescapeHtml(escapedHtml),
+            formatted   = formatXml(html),
+            target      = document.getElementById('notification'),
+            textNode    = document.createTextNode(formatted);
+        // window.console.log(escapedHtml);
+        // window.console.log(html);
         while(target.firstChild) {
           target.removeChild(target.firstChild);
         }
@@ -73,6 +76,10 @@
           }
         }
         return iframe;
+      }
+      
+      function unescapeHtml(html) {
+        return html.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
       }
       
       function formatXml(xml) {

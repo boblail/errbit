@@ -1,5 +1,6 @@
 require 'sinatra/base'
 require 'erb'
+require 'cgi'
 
 class TestApp < Sinatra::Base
   
@@ -14,7 +15,7 @@ class TestApp < Sinatra::Base
   end
   
   get '/notifier_api/v2/notices.xml' do
-    "<pre>#{@params[:data]}</pre>"
+    CGI.escapeHTML(@params[:data])
   end
   
 end
