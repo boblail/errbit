@@ -1,7 +1,7 @@
 module ApplicationHelper
   
   
-  def lighthouse_tracker? object
+  def lighthouse_tracker?(object)
     object.issue_tracker_type == "lighthouseapp"
   end
   
