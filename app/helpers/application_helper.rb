@@ -6,6 +6,7 @@ module ApplicationHelper
   end
   
   
+  
   def user_agent_graph(problem)
     create_percentage_table_for(problem) {|notice| pretty_user_agent(notice.user_agent)}
   end
@@ -13,6 +14,7 @@ module ApplicationHelper
   def pretty_user_agent(user_agent)
     (user_agent.nil? || user_agent.none?) ? "N/A" : "#{user_agent.browser} #{user_agent.version}"
   end
+  
   
   
   def tenant_graph(problem)
@@ -23,6 +25,7 @@ module ApplicationHelper
     uri = url && URI.parse(url)
     uri.blank? ? "N/A" : uri.host
   end
+  
   
   
   def create_percentage_table_for(problem, &block)
@@ -47,12 +50,15 @@ module ApplicationHelper
   end
   
   
+  
 private
+  
   
   
   def total_from_tallies(tallies)
     tallies.values.inject(0) {|sum, n| sum + n}
   end
+  
   
   
 end
