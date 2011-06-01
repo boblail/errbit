@@ -28,7 +28,7 @@ describe Notice do
     before do
       @xml = Rails.root.join('spec','fixtures','hoptoad_test_notice.xml').read
       @app = Factory(:app, :api_key => 'APIKEY')
-      Digest::MD5.stub(:hexdigest).and_return('fingerprintdigest')
+      Hoptoad::V2.stub(:get_fingerprint).and_return('fingerprintdigest')
     end
     
     it 'finds the correct app' do
