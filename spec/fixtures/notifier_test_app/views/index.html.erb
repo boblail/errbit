@@ -51,14 +51,12 @@
       }
       
       function showIframe() {
-        var iframe      = getLastIframe(),
-            escapedHtml = iframe ? iframe.contentWindow.document.body.innerHTML : '',
-            html        = unescapeHtml(escapedHtml),
+        var iframe      = getLastIframe();
+        var src         = iframe.src.match(/data=(.*)/)[1],
+            html        = decodeURIComponent(src),
             formatted   = formatXml(html),
             target      = document.getElementById('notification'),
             textNode    = document.createTextNode(formatted);
-        // window.console.log(escapedHtml);
-        // window.console.log(html);
         while(target.firstChild) {
           target.removeChild(target.firstChild);
         }
