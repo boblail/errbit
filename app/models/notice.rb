@@ -19,7 +19,7 @@ class Notice
   
   scope :ordered, order_by(:created_at.asc)
   
-  delegate :problem, :app, :to => :err
+  delegate :problem, :app, :fingerprint, :to => :err
   
   
   def self.from_xml(hoptoad_xml)

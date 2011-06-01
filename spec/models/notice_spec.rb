@@ -102,9 +102,26 @@ describe Notice do
     end
     
     it "should handle params withour 'request' section" do
-      @xml = Rails.root.join('spec','fixtures','hoptoad_test_notice_without_request_section.xml').read
-      lambda { Notice.from_xml(@xml) }.should_not raise_error
+      xml = Rails.root.join('spec','fixtures','hoptoad_test_notice_without_request_section.xml').read
+      lambda { Notice.from_xml(xml) }.should_not raise_error
     end
+  end
+  
+  
+  describe "fingerprint" do
+    before do
+      @app = Factory(:app, :api_key => 'APIKEY')
+    end
+    
+    it "should be different for two exceptions with different messages" do
+      xml1 = Rails.root.join('spec', 'fixtures', 'hoptoad_test_notice.xml').read
+      xml2 = Rails.root.join('spec', 'fixtures', 'hoptoad_test_notice_with_different_message.xml').read
+      
+      notice1 = Notice.from_xml(xml1)
+      notice2 = Notice.from_xml(xml2)
+      notice1.fingerprint.should_not == notice2.fingerprint
+    end
+    
   end
   
   

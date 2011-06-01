@@ -42,7 +42,10 @@ module Hoptoad
     
     
     def self.get_fingerprint(notice)
-      Digest::MD5.hexdigest notice['error']['backtrace'].to_s
+      fingerprint = ""
+      fingerprint << notice['error']['message'].to_s
+      fingerprint << notice['error']['backtrace'].to_s
+      Digest::MD5.hexdigest(fingerprint)
     end
     
     
