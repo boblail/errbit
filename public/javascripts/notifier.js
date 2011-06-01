@@ -85,8 +85,8 @@ var Hoptoad = {
     error.type        = error.type        || 'Error';
     error.message     = error.message     || 'Unknown error.';
     error.url         = error.url         || '';
-    error.component   = error.component   || '';
-    error.action      = error.action      || '';
+    error.component   = error.component   || error.controller_name || '';
+    error.action      = error.action      || error.action_name || '';
     error['cgi-data'] = error['cgi-data'] || {};
     
     error['cgi-data']['HTTP_USER_AGENT'] = navigator.userAgent;
