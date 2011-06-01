@@ -11,7 +11,7 @@ var Hoptoad = {
                         '<error>' + 
                           '<class>EXCEPTION_CLASS</class>' + 
                           '<message>EXCEPTION_MESSAGE</message>' + 
-                          '<backtrace type="array">BACKTRACE_LINES</backtrace>' + 
+                          '<backtrace>BACKTRACE_LINES</backtrace>' + 
                         '</error>' + 
                         '<request>' + 
                           '<url>REQUEST_URL</url>' + 
@@ -187,11 +187,6 @@ var Hoptoad = {
           Hoptoad.escapeText(file),
           matches[3]));
       }
-    }
-    
-    // !hack: there's got to be at least 2 lines for the parser to consider backtrace an array
-    while(backtrace.length < 2) {
-      backtrace.push(Hoptoad.generateLine('', '', ''));
     }
     
     return backtrace;

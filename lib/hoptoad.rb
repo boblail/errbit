@@ -8,6 +8,7 @@ module Hoptoad
       parsed = ActiveSupport::XmlMini.backend.parse(xml)['notice']
       raise ApiVersionError unless parsed && parsed['version'] == '2.0'
       rekeyed = rekey(parsed)
+      rekeyed = normalize(rekeyed)
       rekeyed['fingerprint'] = get_fingerprint(rekeyed)
       rekeyed
     end
@@ -38,6 +39,14 @@ module Hoptoad
       else
         node
       end
+    end
+    
+    
+    def self.normalize(notice)
+      error = notice['error']
+      backtrace = error['backtrace']
+      backtrace['line'] = [backtrace['line']] unless backtrace['line'].is_a?(Array)
+      notice
     end
     
     

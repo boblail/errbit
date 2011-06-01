@@ -101,9 +101,15 @@ describe Notice do
       @notice.notifier['name'].should == 'Hoptoad Notifier'
     end
     
-    it "should handle params withour 'request' section" do
+    it "should handle params without 'request' section" do
       xml = Rails.root.join('spec','fixtures','hoptoad_test_notice_without_request_section.xml').read
       lambda { Notice.from_xml(xml) }.should_not raise_error
+    end
+    
+    it "should handle params with only a single line of backtrace" do
+      xml = Rails.root.join('spec','fixtures','hoptoad_test_notice_with_one_line_of_backtrace.xml').read
+      lambda { @notice = Notice.from_xml(xml) }.should_not raise_error
+      @notice.backtrace.length.should == 1
     end
   end
   
