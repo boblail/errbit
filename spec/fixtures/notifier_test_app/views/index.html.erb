@@ -33,6 +33,8 @@
       };
       
       function generate(errorName) {
+        try { (0)(); } catch(e) { window.console.log(CrashKit.computeStackTrace(e)); }
+        
         cleanIframes();
         error_generators[errorName]();
       }
