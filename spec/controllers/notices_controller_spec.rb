@@ -30,8 +30,7 @@ describe NoticesController do
       email = ActionMailer::Base.deliveries.last
       email.to.should include(@app.watchers.first.email)
       email.subject.should include(@notice.err.message)
-      email.subject.should include("[#{@app.name}]")
-      email.subject.should include("[#{@notice.err.environment}]")
+      email.subject.should include("[#{@app.name}:#{@notice.err.environment}]")
     end
   end
   
