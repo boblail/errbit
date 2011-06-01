@@ -82,7 +82,7 @@ var Hoptoad = {
   normalizeError: function(errorWithoutDefaults) {
     var error = Hoptoad.mergeDefault(Hoptoad.errorDefaults, errorWithoutDefaults);
     
-    error.type        = error.type        || 'Error';
+    error.type        = error.type        || error.name || 'Error';
     error.message     = error.message     || 'Unknown error.';
     error.url         = error.url         || '';
     error.component   = error.component   || error.controller_name || '';
