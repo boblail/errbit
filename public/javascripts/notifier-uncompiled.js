@@ -169,7 +169,10 @@ var Hoptoad = {
       for(var i=0, ii=lines.length; i<ii; i++) {
         line = lines[i];
         if(Hoptoad.validBacktraceLine(line.url)) {
-          backtrace.push(Hoptoad.generateLine(line.func, line.url, line.line));
+          
+          var file = line.url.replace(error.url, '[PROJECT_ROOT]/');
+          
+          backtrace.push(Hoptoad.generateLine(line.func, file, line.line));
         }
       }
     }
