@@ -27,8 +27,8 @@
         %td
           %em Sadly, no one is watching this app
 
-%h3 Latest Deploys
 - if @deploys.any?
+  %h3 Latest Deploys
   %table.deploys
     %thead
       %tr
@@ -47,8 +47,6 @@
           %td.repository #{deploy.repository}
           %td.revision #{deploy.revision}
   = link_to "All Deploys (#{@app.deploys.count})", app_deploys_path(@app), :class => 'button'
-- else
-  %h3 No deploys
 
 - if @app.problems.any?
   %h3.clear Errs
