@@ -8,7 +8,7 @@ class App
   field :notify_on_errs, :type => Boolean, :default => true
   field :notify_on_deploys, :type => Boolean, :default => true
   
-  # Some legacy apps may have sting as key instead of BSON::ObjectID
+  # Some legacy apps may have string as key instead of BSON::ObjectID
   identity :type => String
   
   # There seems to be a Mongoid bug making it impossible to use String identity with references_many feature:
@@ -21,6 +21,7 @@ class App
   embeds_many :watchers
   embeds_many :deploys
   embeds_one :issue_tracker
+  references_many :error_reports, :dependent => :destroy
   references_many :problems, :dependent => :destroy
   
   before_validation :generate_api_key, :on => :create
@@ -37,6 +38,50 @@ class App
     :reject_if => proc { |attrs| !%w( lighthouseapp redmine ).include?(attrs[:issue_tracker_type]) }
   
   
+  
+  # Processes a new error report.
+  # 
+  # Accepts either XML or a hash with the following attributes:
+  #
+  # * <tt>:klass</tt> - the class of error
+  # * <tt>:message</tt> - the error message
+  # * <tt>:backtrace</tt> - an array of stack trace lines
+  #
+  # * <tt>:request</tt> - a hash of values describing the request
+  # * <tt>:server_environment</tt> - a hash of values describing the server environment
+  #
+  # * <tt>:api_key</tt> - the API key with which the error was reported
+  # * <tt>:notifier</tt> - information to identify the source of the error report
+  #
+  def self.report_error!(*args)
+    report = ErrorReport.create!(*args)
+    report.save
+    report.generate_notice!
+  end
+  
+  
+  
+  # Processes a new error report.
+  # 
+  # Accepts a hash with the following attributes:
+  #
+  # * <tt>:klass</tt> - the class of error
+  # * <tt>:message</tt> - the error message
+  # * <tt>:backtrace</tt> - an array of stack trace lines
+  #
+  # * <tt>:request</tt> - a hash of values describing the request
+  # * <tt>:server_environment</tt> - a hash of values describing the server environment
+  #
+  # * <tt>:notifier</tt> - information to identify the source of the error report
+  #
+  def report_error!(hash)
+    report = ErrorReport.create!(hash.merge(:api_key => api_key))
+    report.save
+    report.generate_notice!
+  end
+  
+  
+  
   def find_or_create_err!(attrs)
     find_err(attrs) || problems.create!.errs.create!(attrs)
   end
@@ -48,15 +93,16 @@ class App
   end
   
   
+  
   # Mongoid Bug: find(id) on association proxies returns an Enumerator
   def self.find_by_id!(app_id)
     where(:_id => app_id).first || raise(Mongoid::Errors::DocumentNotFound.new(self,app_id))
   end
   
-  
   def self.find_by_api_key!(key)
     where(:api_key => key).first || raise(Mongoid::Errors::DocumentNotFound.new(self,key))
   end
+  
   
   
   def last_deploy_at
@@ -77,7 +123,9 @@ class App
   alias :notify_on_deploys? :notify_on_deploys
   
   
+  
 protected
+  
   
   
   def generate_api_key
@@ -93,6 +141,7 @@ protected
       end if issue_tracker.errors
     end
   end
+  
   
   
 end
