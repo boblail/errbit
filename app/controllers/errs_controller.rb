@@ -12,7 +12,16 @@ class ErrsController < ApplicationController
     @selected_errs = params[:errs] || []
     respond_to do |format|
       format.html do
-        @errs = Problem.for_apps(app_scope).unresolved.ordered.paginate(:page => params[:page], :per_page => current_user.per_page)
+        
+        @sort = params[:sort]
+        @order = params[:order]
+        @sort = "app" unless %w{message last_notice_at last_deploy_at count}.member?(@sort)
+        @order = "asc" unless (@order == "desc")
+        
+        @errs = Problem.for_apps(app_scope).ordered_by(@sort, @order).paginate({
+          :page => params[:page],
+          :per_page => current_user.per_page
+        })
       end
       format.atom do
         @errs = Problem.for_apps(app_scope).unresolved.ordered

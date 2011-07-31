@@ -23,6 +23,16 @@ class Problem
   scope :resolved, where(:resolved => true)
   scope :unresolved, where(:resolved => false)
   scope :ordered, order_by(:last_notice_at.desc)
+  def self.ordered_by(sort, order)
+    case sort
+    when "app";            order_by(["app_name", order])
+    when "message";        order_by(["message", order])
+    when "last_notice_at"; order_by(["last_notice_at", order])
+    when "last_deploy_at"; order_by(["last_deploy_at", order])
+    when "count";          order_by(["notices_count", order])
+    else raise("\"#{sort}\" is not a recognized sort")
+    end
+  end
   scope :in_env, lambda {|env| where('errs.environment' => env)}
   scope :for_apps, lambda {|apps| where(:app_id.in => apps.all.map(&:id))}
   
