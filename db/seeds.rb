@@ -34,11 +34,20 @@ errors = [{
   :klass => "RuntimeError",
   :message => "Could not find Red October"
 }, {
+  :klass => "TypeError",
+  :message => "can't convert Symbol into Integer"
+}, {
+  :klass => "ActiveRecord::RecordNotFound",
+  :message => "could not find a record with the id 5"
+}, {
+  :klass => "NameError",
+  :message => "uninitialized constant Tag"
+}, {
   :klass => "SyntaxError",
   :message => "unexpected tSTRING_BEG, expecting keyword_do or '{' or '('"
 }]
 
-RANDOM_METHODS = ActiveSupport.methods.shuffle[1..4]
+RANDOM_METHODS = ActiveSupport.methods.shuffle[1..8]
 
 def random_backtrace
   backtrace = []
@@ -51,7 +60,7 @@ def random_backtrace
 end
 
 errors.each do |error_template|
-  rand(13).times do
+  rand(34).times do
     
     error_report = error_template.reverse_merge({
       :klass => "StandardError",
