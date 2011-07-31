@@ -9,6 +9,10 @@ class Problem
   field :last_notice_at, :type => DateTime
   field :resolved, :type => Boolean, :default => false
   field :issue_link, :type => String
+  field :app_name, :type => String
+  field :notices_count, :type => Integer
+  field :message, :type => String
+  field :where, :type => String
   
   index :last_notice_at
   index :app_id
@@ -22,7 +26,7 @@ class Problem
   scope :in_env, lambda {|env| where('errs.environment' => env)}
   scope :for_apps, lambda {|apps| where(:app_id.in => apps.all.map(&:id))}
   
-  delegate :environment, :klass, :where, :message, :to => :first_err
+  delegate :environment, :klass, :to => :first_err
   
   
   def first_err
@@ -76,6 +80,18 @@ class Problem
   
   def unresolved?
     !resolved?
+  end
+  
+  
+  def after_notice_created(notice)
+    new_attributes = {}
+    new_attributes[:last_notice_at] = notice.created_at unless last_notice_at && last_notice_at > notice.created_at
+    new_attributes[:resolved] = false
+    new_attributes[:app_name] = app.name
+    new_attributes[:notices_count] = errs.collect {|e| e.notices.count}.sum
+    new_attributes[:message] = first_err.message
+    new_attributes[:where] = first_err.where
+    update_attributes(new_attributes)
   end
   
   

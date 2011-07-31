@@ -62,17 +62,15 @@ class Notice
   end
   
   
-  def update_problem
-    problem.update_attributes(:last_notice_at => created_at) unless problem.last_notice_at && problem.last_notice_at > created_at
-    problem.update_attributes(:resolved => false) if err.problem.resolved?
-  end
-  
-  
 protected
   
   
   def should_notify?
     app.notify_on_errs? && Errbit::Config.email_at_notices.include?(problem.notices.count) && app.watchers.any?
+  end
+  
+  def update_problem
+    problem.after_notice_created(self)
   end
   
   
