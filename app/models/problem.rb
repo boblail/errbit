@@ -16,6 +16,11 @@ class Problem
   
   index :last_notice_at
   index :app_id
+  index :app_name
+  index :message
+  index :last_notice_at
+  # index :last_deploy_at
+  index :notices_count
   
   referenced_in :app
   embeds_many :errs
