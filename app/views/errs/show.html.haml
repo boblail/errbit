@@ -1,14 +1,14 @@
 - content_for :page_title, @err.message
 - content_for :title, @err.klass
 - content_for :meta do
-  %strong App:
-  = link_to @app.name, app_path(@app)
-  %strong Where:
-  = @err.where
-  %strong Environment:
-  = @err.environment
-  %strong Last Notice:
-  = last_notice_at(@err).to_s(:micro)
+  App:
+  %strong= link_to @app.name, app_path(@app)
+  Where:
+  %strong= @err.where
+  Environment:
+  %strong= @err.environment
+  Last Notice:
+  %strong= last_notice_at(@err).to_s(:micro)
 - content_for :action_bar do
   - if @err.app.issue_tracker
     - if @err.issue_link.blank?
