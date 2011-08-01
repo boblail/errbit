@@ -50,7 +50,7 @@ class ErrorReport
   end
   
   def rails_env
-    server_environment['name'] || 'development'
+    server_environment['environment-name'] || 'development'
   end
   
   def component
