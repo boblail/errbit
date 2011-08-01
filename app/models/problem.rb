@@ -51,6 +51,7 @@ class Problem
       problem.errs.each {|err| merged_problem.errs << err.dup}
       problem.destroy
     end
+    merged_problem.after_notice_created(nil)
     merged_problem
   end
   
@@ -95,7 +96,11 @@ class Problem
   
   def after_notice_created(notice)
     new_attributes = {}
-    new_attributes[:last_notice_at] = notice.created_at unless last_notice_at && last_notice_at > notice.created_at
+    if notice
+      new_attributes[:last_notice_at] = notice.created_at unless last_notice_at && last_notice_at > notice.created_at
+    else
+      new_attributes[:last_notice_at] = notices.collect(&:created_at).max
+    end
     new_attributes[:resolved] = false
     new_attributes[:app_name] = app.name
     new_attributes[:notices_count] = errs.collect {|e| e.notices.count}.sum
