@@ -69,7 +69,7 @@ class Problem
       problems << new_problem
       err.destroy
     end
-    problems
+    problems.each {|p| p.after_notice_created(nil)}
   end
   
   
