@@ -70,7 +70,7 @@ protected
   end
   
   def update_problem
-    problem.after_notice_created(self)
+    problem.update_cached_values(:notice => self)
   end
   
   

@@ -56,7 +56,7 @@ class Problem
       problem.errs.each {|err| merged_problem.errs << err.dup}
       problem.destroy
     end
-    merged_problem.after_notice_created(nil)
+    merged_problem.update_cached_values
     merged_problem
   end
   
@@ -74,7 +74,7 @@ class Problem
       problems << new_problem
       err.destroy
     end
-    problems.each {|p| p.after_notice_created(nil)}
+    problems.each {|p| p.update_cached_values}
   end
   
   
@@ -99,8 +99,9 @@ class Problem
   end
   
   
-  def after_notice_created(notice)
+  def update_cached_values(options={})
     new_attributes = {}
+    notice = options[:notice]
     if notice
       new_attributes[:last_notice_at] = notice.created_at unless last_notice_at && last_notice_at > notice.created_at
     else
