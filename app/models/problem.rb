@@ -13,6 +13,7 @@ class Problem
   field :notices_count, :type => Integer
   field :message, :type => String
   field :where, :type => String
+  field :backtrace_line, :type => Hash
   
   index :last_notice_at
   index :app_id
@@ -107,6 +108,7 @@ class Problem
     else
       new_attributes[:last_notice_at] = notices.collect(&:created_at).max
     end
+    new_attributes[:backtrace_line] = first_err.notices[0].backtrace[0] if backtrace_line.blank?
     new_attributes[:resolved] = false
     new_attributes[:app_name] = app.name
     new_attributes[:notices_count] = errs.collect {|e| e.notices.count}.sum

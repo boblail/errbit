@@ -500,6 +500,10 @@ table.apps tbody tr:hover td ,table.errs tbody tr:hover td { background-color: #
 table.apps td.name, table.errs td.message {
   width: 100%;
 }
+td.message .line {
+  display:inline-block;
+  margin-left:1em;
+}
 td.deploy {
   white-space: nowrap;
 }
