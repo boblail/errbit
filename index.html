@@ -8,7 +8,7 @@
   <style type="text/css">
     body {
       margin-top: 1.0em;
-      background-color: #80e598;
+      background-color: white;
       font-family: Helvetica, Arial, FreeSans, san-serif;
       color: #000000;
     }
@@ -20,7 +20,7 @@
     h1 .small { font-size: 0.4em; }
     h1 a { text-decoration: none }
     h2 { font-size: 1.5em; color: #7f1a67; }
-    h3 { text-align: center; color: #7f1a67; }
+    h3 { color: #7f1a67; }
     a { color: #7f1a67; }
     .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
     .download { float: right; }
@@ -48,13 +48,49 @@
     <div class="description">
       The open source error catcher that's Hoptoad API compliant
     </div>
-
-    <h2>Authors</h2>
-<p>Akzhan Abdulin (akzhan.abdulin@gmail.com)<br/>Barry Hess (barry@bjhess.com)<br/>Bob Lail (bob.lailfamily@gmail.com)<br/>Chris Cooke (cc@chris-cooke.com)<br/>Drew Blas (drew.blas@isotopetech.com)<br/>Jared Pace (jared@codewordstudios.com)<br/>Jeremy Lecour (jeremy.lecour@gmail.com)<br/>Joshua Priddle (jpriddle@nevercraft.net)<br/>Nick Recobra (oruen@undev.ru)<br/>Philip Hallstrom (philip@pjkh.com)<br/>Michael Parenteau (prmparenteau@aol.com)<br/>Raja Bhadury (rajabhadury@gmail.com)<br/>Robert Lail (robert.lail@cph.org)<br/>Sergey Avseyev (sergey.avseyev@gmail.com)<br/>Steve Sloan (steve@finagle.org)<br/><br/>      </p>
-<h2>Contact</h2>
-<p>Bob Lail (bob.lailfamily@gmail.com)<br/>      </p>
-
-
+    
+    <h2>This is a fork</h2>
+    This is a fork of <a href="https://github.com/errbit/errbit">github.com/errbit/errbit</a>.
+    
+    <h3>Changes</h3>
+    The major changes I've made on <strong>boblail/errbit</strong> are:
+    <ol>
+      <li>Added the ability to apply bulk actions to selected errs</li>
+      <li>Added the ability to merge errs</li>
+      <li>Tightened up the user interface</li>
+      <li>Made column headers sortable</li>
+      <li>Enabled Errbit to receive notifications from the JavaScript notifier</li>
+      <li>Worked on improving performance through caching values onto Problem</li>
+      <li>Notice summary screens show breakdowns for certain values</li>
+      <li>Refactored notice API so that it is (a) easier to test and (b) possible to re-report all notices</li>
+    </ol>
+    
+    <h3>UI Design Changes</h3>
+    
+    <h5>Pagination (errbit/errbit):</h5>
+    <img src="images/errbit-pagination.png" />
+    
+    <h5>Pagination (boblail/errbit):</h5>
+    <img src="images/boblail-pagination.png" />
+    
+    <h5>Banner (errbit/errbit):</h5>
+    <img src="images/errbit-banner.png" />
+    
+    <h5>Banner (boblail/errbit):</h5>
+    <img src="images/boblail-banner.png" />
+    
+    <h5>Notice View (errbit/errbit):</h5>
+    <img src="images/errbit-notice.png" />
+    
+    <h5>Notice View (boblail/errbit):</h5>
+    <img src="images/boblail-notice.png" />
+    
+    <h5>Backtrace (errbit/errbit):</h5>
+    <img src="images/errbit-backtrace.png" />
+    
+    <h5>Backtrace (boblail/errbit):</h5>
+    <img src="images/boblail-backtrace.png" />
+    
     <h2>Download</h2>
     <p>
       You can download this project in either
