@@ -16,6 +16,7 @@ class Problem
   field :environment
   field :klass
   field :where
+  field :backtrace_line, :type => Hash
   
   index :last_notice_at
   index :app_id
