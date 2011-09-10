@@ -1,6 +1,10 @@
 require 'hoptoad'
 require 'recurse'
 
+# Stores each unique notice of an error report
+# (There is a 1-to-1 correspondence between Notices and ErrorReports)
+# Notices are grouped by common features into Errs
+
 class Notice
   include Mongoid::Document
   include Mongoid::Timestamps

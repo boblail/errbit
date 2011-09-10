@@ -25,6 +25,7 @@ class App
   embeds_many :deploys
   embeds_one :issue_tracker
   has_many :problems, :inverse_of => :app, :dependent => :destroy
+  references_many :error_reports, :dependent => :destroy
   
   before_validation :generate_api_key, :on => :create
   before_save :normalize_github_url
@@ -57,7 +58,8 @@ class App
   # * <tt>:notifier</tt> - information to identify the source of the error report
   #
   def self.report_error!(*args)
-    report = ErrorReport.new(*args)
+    report = ErrorReport.create!(*args)
+    report.save
     report.generate_notice!
   end
   
@@ -77,7 +79,8 @@ class App
   # * <tt>:notifier</tt> - information to identify the source of the error report
   #
   def report_error!(hash)
-    report = ErrorReport.new(hash.merge(:api_key => api_key))
+    report = ErrorReport.create!(hash.merge(:api_key => api_key))
+    report.save
     report.generate_notice!
   end
   
